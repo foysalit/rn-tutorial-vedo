@@ -11,10 +11,10 @@ export default class CameraPage extends React.Component {
 
     state = {
         captures: [],
-        flashMode: null,
         capturing: null,
-        cameraType: null,
         hasCameraPermission: null,
+        cameraType: Camera.Constants.Type.back,
+        flashMode: Camera.Constants.FlashMode.off,
     };
 
     setFlashMode = (flashMode) => this.setState({ flashMode });
