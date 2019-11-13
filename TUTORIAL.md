@@ -452,7 +452,7 @@ import Gallery from './gallery.component';
         
 // ... previously written code
 
-                {captures.length > 0 && <Gallery captures={captures}/>}
+                {this.state.captures.length > 0 && <Gallery captures={this.state.captures}/>}
 
                 <Toolbar 
 
