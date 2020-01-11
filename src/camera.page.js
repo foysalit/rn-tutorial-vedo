@@ -1,6 +1,7 @@
 import React from 'react';
+import { Camera } from 'expo-camera';
 import { View, Text } from 'react-native';
-import { Camera, Permissions } from 'expo';
+import * as Permissions from 'expo-permissions';
 
 import styles from './styles';
 import Toolbar from './toolbar.component';

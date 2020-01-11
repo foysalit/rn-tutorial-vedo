@@ -26,9 +26,10 @@ This will prompt you to choose between 2 options. Expo can create a barebone rea
 At this point you should have the project folder `vedo/` created for you. Navigate inside that and run the following command to get the app started:
 
 ```bash
+expo install expo-camera expo-permissions
 yarn start
 ``` 
-This will fire up the Expo builder and output a QR code on your terminal. At this point, you need a device to run the app on before we can get to work. I personally like using an actual device during most of the development phase just because it feels really nice to actually handhold my app when building it. However, you're free to use simulator/emulator on your computer for development. [Expo's documentation](https://docs.expo.io/versions/v32.0.0/workflow/up-and-running#open-the-app-on-your-phone-or) can help you with that if you haven't setup your simulator yet. 
+Here, first we are adding 2 expo packages that we will use for the app. Then, we are firing up the Expo builder that will output a QR code on your terminal. At this point, you need a device to run the app on before we can get to work. I personally like using an actual device during most of the development phase just because it feels really nice to actually handhold my app when building it. However, you're free to use simulator/emulator on your computer for development. [Expo's documentation](https://docs.expo.io/versions/v32.0.0/workflow/up-and-running#open-the-app-on-your-phone-or) can help you with that if you haven't setup your simulator yet. 
 
 To see the app on your device, you need the Expo app on it. You can get it from the App Store or the Play Store depending on what device you have. 
 
@@ -64,8 +65,9 @@ Here we're importing the `CameraPage` component from the file we created earlier
 ```es6
 // src/camera.page.js file
 import React from 'react';
+import { Camera } from 'expo-camera';
 import { View, Text } from 'react-native';
-import { Camera, Permissions } from 'expo';
+import * as Permissions from 'expo-permissions';
 
 import styles from './styles';
 
@@ -110,7 +112,7 @@ A few things going on here but all of it is pretty much boilerplate stuff. Let's
 
 - We are importing a few modules from react-native, Expo and our `styles.js` file. I will explain each of them as they're used in the component code.
 - We define a `camera` and `state` instance variable for our `CameraPage` component class. `camera` will hold a reference to the actual camera component that can be used to interact with the camera itself and give it instructions like take picture or record video etc. The `state` only has a `hasCameraPermission` property. As you may have seen, to access device camera from an app, the user needs to permit access to it and we use the state to keep track of the permission.
-- We are using `componentDidMount` lifecycle component to request permissions from the user. Expo gives us a very handy `Permissions` module that can be used to request permission from users to access various features of the device. To access the camera we need `CAMERA` permission and to record audio within recorded video we need `AUDIO_RECORDING` permission. We request both using `Permission.askAsync` method. The `askAsync` method returns an object with the `status` property which is set to `granted` if the user accepts the request. We set `hasCameraPermission` to true only if both permissions are granted. Requesting permissions is a bit tricky and has a few edge cases that should be handled with better UX but for the purpose of this post, this will have to do.
+- We are using `componentDidMount` lifecycle component to request permissions from the user. Expo gives us a very handy `Permissions` module that can be used to request permission from users to access various features of the device. To access the camera we need `CAMERA` permission and to record audio within recorded video we need `AUDIO_RECORDING` permission. We request both using `Permissions.askAsync` method. The `askAsync` method returns an object with the `status` property which is set to `granted` if the user accepts the request. We set `hasCameraPermission` to true only if both permissions are granted. Requesting permissions is a bit tricky and has a few edge cases that should be handled with better UX but for the purpose of this post, this will have to do.
 - Now we move to the mighty `render()` method. As of now, What we show to the user depends on only one state variable, `hasCameraPermission`. Initially, we set it to be `null` remember? so if it's `null` that means user have neither denied nor granted permissions and we render an empty `<View/>`. Denying any of the permission prompts will set the `hasCameraPermission` to `false` and if that's the case, we render a simple text that tells the user that the permissions were denied. If none of the above cases were hit, we can safely assume that `hasCameraPermission` is set to `true` and we can try to render the camera view. This is where we use the `Camera` component imported from `expo` at the top of the file. Notice that we're setting `style={styles.perview}` which is the only thing we haven't defined yet. So let's write some styling, shall we?
 
 > 💡**Pro Tip**: Users might deny permissions accidentally, so a full-proff UX would offer them a way to tell us to ask for permissions again. We are not gonna go into the nitty-gritty like that but it's definitely something you need to be aware of.
@@ -168,7 +170,7 @@ To keep things a little more organized and clean, we will create a new component
 ```javascript
 // src/toolbar.component.js file
 import React from 'react';
-import { Camera } from 'expo';
+import { Camera } from 'expo-camera';
 import { Ionicons } from '@expo/vector-icons';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { View, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
